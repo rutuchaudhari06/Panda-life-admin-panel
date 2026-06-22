@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Edit2, KeyRound, LogOut, Mail, Shield, Clock } from 'lucide-react';
 import Modal from '../components/Modal';
 import { FormInput, PrimaryButton, SecondaryButton } from '../components/FormElements';
+import { useAuth } from '../context/AuthContext';
 
 export default function Profile() {
+  const { user, logout } = useAuth();
   const [editOpen, setEditOpen] = useState(false);
   const [passwordOpen, setPasswordOpen] = useState(false);
-  const [name, setName] = useState('Ananya Sharma');
-  const [email, setEmail] = useState('ananya.sharma@pandalife.com');
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
 
   return (
     <div className="space-y-6">
@@ -18,7 +20,7 @@ export default function Profile() {
 
       <div className="bg-white rounded-2xl shadow-soft border border-gray-100 p-6 max-w-2xl">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-          <img src="https://i.pravatar.cc/150?img=12" alt="Admin" className="w-24 h-24 rounded-2xl object-cover shadow-soft" />
+          <img src={user?.avatar} alt={user?.role} className="w-24 h-24 rounded-2xl object-cover shadow-soft" />
           <div className="flex-1 text-center sm:text-left">
             <h3 className="font-display font-semibold text-xl text-charcoal-900">{name}</h3>
             <p className="text-sm text-gray-400 mb-4">{email}</p>
@@ -28,7 +30,7 @@ export default function Profile() {
                 <Mail size={15} className="text-bamboo-500" /> {email}
               </div>
               <div className="flex items-center justify-center sm:justify-start gap-2 text-charcoal-600">
-                <Shield size={15} className="text-bamboo-500" /> Role: Administrator
+                <Shield size={15} className="text-bamboo-500" /> Role: {user?.role}
               </div>
               <div className="flex items-center justify-center sm:justify-start gap-2 text-charcoal-600">
                 <Clock size={15} className="text-bamboo-500" /> Last Login: June 13, 2026, 9:42 AM
@@ -44,7 +46,7 @@ export default function Profile() {
           <button onClick={() => setPasswordOpen(true)} className="inline-flex items-center gap-2 px-4 py-2.5 bg-bamboo-50 text-bamboo-700 text-sm font-semibold rounded-xl hover:bg-bamboo-100 active:scale-[0.98] transition-all">
             <KeyRound size={15} /> Change Password
           </button>
-          <button className="inline-flex items-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 text-sm font-semibold rounded-xl hover:bg-red-100 active:scale-[0.98] transition-all">
+          <button onClick={logout} className="inline-flex items-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 text-sm font-semibold rounded-xl hover:bg-red-100 active:scale-[0.98] transition-all">
             <LogOut size={15} /> Logout
           </button>
         </div>

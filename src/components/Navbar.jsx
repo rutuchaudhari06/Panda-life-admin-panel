@@ -1,8 +1,13 @@
 import { Search, Bell, Menu, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Navbar({ onMenuClick }) {
+  const { user } = useAuth();
   const [notifOpen, setNotifOpen] = useState(false);
+
+  if (!user) return null;
 
   const notifications = [
     { text: 'New order #ORD-5028 received', time: '5 min ago' },
@@ -53,18 +58,18 @@ export default function Navbar({ onMenuClick }) {
           )}
         </div>
 
-        <div className="flex items-center gap-2 pl-2 border-l border-[#EDDDC1]">
+        <Link to="/profile" className="flex items-center gap-2 pl-2 border-l border-[#EDDDC1] hover:opacity-85 transition-opacity">
           <img
-            src="https://i.pravatar.cc/100?img=12"
-            alt="Admin"
+            src={user.avatar}
+            alt={user.role}
             className="w-10 h-10 rounded-xl object-cover"
           />
-          <div className="hidden md:block">
-            <p className="text-sm font-semibold text-charcoal-900 leading-tight">Ananya Sharma</p>
-            <p className="text-xs text-gray-600 leading-tight">Admin</p>
+          <div className="hidden md:block text-left">
+            <p className="text-sm font-semibold text-charcoal-900 leading-tight">{user.name}</p>
+            <p className="text-xs text-gray-600 leading-tight">{user.role}</p>
           </div>
           <ChevronDown size={14} className="text-gray-600 hidden md:block" />
-        </div>
+        </Link>
       </div>
     </header>
   );
